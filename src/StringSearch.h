@@ -1,6 +1,8 @@
 #ifndef STRING_SEARCH_H
 #define STRING_SEARCH_H
 
+#include <string>
+
 class StringSearch {
 public:
 	virtual int search() = 0;
