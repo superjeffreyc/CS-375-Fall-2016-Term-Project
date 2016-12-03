@@ -16,15 +16,15 @@ string printFoundText(string &text, int start, int len){
 int main(){
 	string text, rktext, kmptext;
 	string pattern;
-	
+
 	cout << "Enter text to search and hit <Enter>" << endl;
 	cin >> text;
 	rktext = text;
 	kmptext = text;
-	
+
 	cout << "Enter pattern to serarch for and hit <Enter>" << endl;
 	cin >> pattern;
-	
+
 	BruteForce test(text, pattern);
 
 	int ret = test.search();
@@ -32,7 +32,7 @@ int main(){
 	if(ret == -1)
 		cout << "Couldn't find pattern in text!" << endl;
 	else
-		cout << " Location in text is " << printFoundText(text, ret, 
+		cout << " Location in text is " << printFoundText(text, ret,
 											pattern.size()) << endl;
 
 	RabinKarp rk(rktext, pattern);
@@ -40,13 +40,13 @@ int main(){
 	cout << "Rabin-Karp: ";
 	if (ret == -1) cout << "Couldn't find pattern in text!" << endl;
 	else cout << " Location in text is " << printFoundText(rktext, ret, pattern.size()) << endl;
-	
+
 	KMPSearch kmp(kmptext, pattern);
 	ret = kmp.search();
 	cout << "KMP: ";
 	if (ret == -1) cout << "Couldn't find pattern in text!" << endl;
 	else cout << " Location in text is " << printFoundText(kmptext, ret, pattern.size()) << endl;
-	
-	
+
+
 	return 0;
 }
