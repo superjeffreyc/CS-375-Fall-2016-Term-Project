@@ -6,8 +6,13 @@
 class RabinKarp : public StringSearch {
 	std::string text;
 	std::string pattern;
-	int primeNumber;
-	int MSCfactor;
+
+	int primeNumber;			// Base multiplier for each character
+	int MSCfactor;				// Most significant character multiplier
+	int lastSubstringIndex;
+
+	int patternHash;
+	int textHash;
 
 public:
 	RabinKarp(std::string, std::string);
@@ -18,7 +23,6 @@ private:
 	int calculateInitialHash(std::string substring);
 	bool compareStrings(int currentIndex);
 	int calculateRollingHash(int textHash, int currentIndex, int lastSubstringIndex);
-	void hashPreparations();
 };
 
 #endif
