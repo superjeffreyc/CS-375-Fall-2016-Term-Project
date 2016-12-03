@@ -22,7 +22,7 @@ private:
 	int calculateMSCFactor();
 	int calculateInitialHash(std::string substring);
 	bool compareStrings(int currentIndex);
-	int calculateRollingHash(int textHash, int currentIndex, int lastSubstringIndex);
+	void calculateRollingHash(int currentIndex);
 };
 
 #endif

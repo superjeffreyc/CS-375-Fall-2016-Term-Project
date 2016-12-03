@@ -29,8 +29,8 @@ int RabinKarp::search(){
 			return currentIndex;
 		}
 
-		// Calculate rolling hash - remove most significant character and add next character
-		textHash = calculateRollingHash(textHash, currentIndex, lastSubstringIndex);
+		// Calculate rolling hash - remove most significant character (at currentIndex) and add next character after the window
+		calculateRollingHash(currentIndex);
 	}
 
 	return -1;	// Could not find the pattern
@@ -67,10 +67,9 @@ bool RabinKarp::compareStrings(int currentIndex) {
 }
 
 // Rolling hash - remove most significant character and add next character. Runs in O(1)
-int RabinKarp::calculateRollingHash(int textHash, int currentIndex, int lastSubstringIndex) {
+void RabinKarp::calculateRollingHash(int currentIndex) {
 	if (currentIndex < lastSubstringIndex) {
 		textHash = primeNumber*(textHash - text[currentIndex]*MSCfactor);	// Remove most significant character
 		textHash += text[currentIndex+pattern.length()];					// Add next character
 	}
-	return textHash;	// No more substrings left
 }
