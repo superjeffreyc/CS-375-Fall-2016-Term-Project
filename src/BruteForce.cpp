@@ -1,26 +1,26 @@
 #include "BruteForce.h"
 
-BruteForce::BruteForce(std::string text, std::string pattern) : 
+BruteForce::BruteForce(std::string text, std::string pattern) :
 									text(text), pattern(pattern){}
 
 // Naive brute force implementation for finding the next location of pattern
 bool BruteForce::searchHelper(int &tIndex){
 	for(;tIndex < text.size(); tIndex++){
-		if(pattern[0] == text[tIndex]){
-			for(int j = 1; j < pattern.size(); j++){
-				if(pattern[j] != text[tIndex+j]) 
+		// if(pattern[0] == text[tIndex]){
+			for(int j = 0; j < pattern.size(); j++){
+				if(pattern[j] != text[tIndex+j])
 					break;
 				if(j == (pattern.size()-1)){ //double check this logic
 					tIndex++;			//was causing a nasty bug earlier
 					return true;
 				}
 			}
-		}
+		// }
 	}
 	return false;
 }
 
-int BruteForce::search(){ 
+int BruteForce::search(){
 	int tIndex = 0;
 	bool found = searchHelper(tIndex);
 	if(found)
