@@ -60,53 +60,45 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		BFall = bf1.findAll();
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
-		BFtotalTime += timeMilli;
+		BFtotalTime += timeMilli.count();
 	}
+	BFtotalTime /= 100.0;
 
-	double KMPtotalTime = 0.0
+	double KMPtotalTime = 0.0;
 	vector<int> KMPall;
 	for(int i=0; i<100; i++){
 		auto begin = chrono::steady_clock::now();
-		BruteForce KMPrun(text, pattern);
+		KMPSearch KMPrun(text, pattern);
 		KMPall = KMPrun.findAll();
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
-		KMPtotalTime += timeMILLi;
+		KMPtotalTime += timeMilli.count();
 	}
+	KMPtotalTime /= 100.0;
 
-	assert((BFall == KMPall));
+	double RKtotalTime = 0.0;
+	vector<int> RKall;
+	for(int i=0; i<100; i++){
+		auto begin = chrono::steady_clock::now();
+		RabinKarp RKrun(text, pattern);
+		RKall = RKrun.findAll();
+		auto end = chrono::steady_clock::now();
+		timeMilli = end - begin;
+		RKtotalTime += timeMilli.count();
+	}
+	RKtotalTime /= 100.0;
 
+	assert((BFall == KMPall) && (RKall == KMPall));
 	for(int i = KMPall.size(); i >0; i--) //making it html friendly
 		fixText(text, KMPall[i-1], pattern.size());
 
-	printHTML(text, KMPall, oFile);
-
-	begin = chrono::steady_clock::now();
-	KMPSearch kmp(text, pattern);
-	kmp.findAll();
-	end = chrono::steady_clock::now();
-	timeMilli = end - begin;
-	auto KMPtime = timeMilli.count();
-	cout<<"KMP: time diff in microsecs is " << timeMilli.count()<<endl;
-
-	begin = chrono::steady_clock::now();
-	RabinKarp rk(text, pattern);
-	rk.search();
-	rk.findAll();
-	rk.findMultiple(multiplePatterns);
-
-	end = chrono::steady_clock::now();
-	timeMilli = end - begin;
-	auto RKtime = timeMilli.count();
-	cout<<"RabinKarp: time diff in microsecs is " << timeMilli.count()<<endl;
-
-	printTimes(KMPall.size(), BFtime, KMPtime, RKtime, oFile);
+	printHTML(text, KMPall, oFile, KMPall.size(), BFtotalTime, KMPtotalTime, RKtotalTime);
 }
 
 int main(int argc, char **argv){
 	if(argc != 4){
 		cout << "./SearchComparisons <text file> <pattern file> <output file name>"<<endl;
 	}
-
+	testStringSearches(argv[1], argv[2], argv[3]);
 	return 0;
 }
