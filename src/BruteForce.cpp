@@ -29,6 +29,17 @@ int BruteForce::search(){
 		return -1;
 }
 
+std::vector<std::vector<int>> BruteForce::findMultiple(std::vector<std::string> patterns) {
+	std::vector<std::vector<int>> multipleIndices;
+	for (std::string s : patterns) {
+		pattern = s;
+		std::vector<int> indices = findAll();
+		multipleIndices.push_back(indices);
+	}
+
+	return multipleIndices;
+}
+
 std::vector<int> BruteForce::findAll(){
 	std::vector<int> locations;
 	int tIndex = 0;

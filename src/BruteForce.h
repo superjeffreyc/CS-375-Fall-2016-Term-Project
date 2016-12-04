@@ -16,6 +16,8 @@ public:
 	bool searchHelper(int &tIndex);
 	int search();
 	std::vector<int> findAll();
+	std::vector<std::vector<int>> findMultiple(std::vector<std::string>);
+
 };
 
 #endif

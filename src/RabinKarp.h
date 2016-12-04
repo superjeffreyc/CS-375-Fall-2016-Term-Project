@@ -18,11 +18,13 @@ public:
 	RabinKarp(std::string, std::string);
 	int search();
 	std::vector<int> findAll();
+	std::vector<std::vector<int>> findMultiple(std::vector<std::string>);
 
 private:
 	int calculateMSCFactor();
 	int calculateInitialHash(std::string substring);
 	bool compareStrings(int currentIndex);
+	bool compareMultipleStrings(int currentIndex, std::string pattern);
 	void calculateRollingHash(int currentIndex);
 	void preprocessHashes();
 };

@@ -17,8 +17,8 @@ void fixText(string &text, int start, int len){
 	text.insert((start), "<span style = \"background-color: #FFFF00\">");
 }
 
-void printHTML(string text, vector<int> locations, string oFile, int matches, 
-				double BFtime, double KMPtime, double RKtime){ 
+void printHTML(string text, vector<int> locations, string oFile, int matches,
+				double BFtime, double KMPtime, double RKtime){
 	ofstream myFile(oFile);
 	myFile << "<!DOCTYPE html><html><head></head><body>";
 	myFile << text;
@@ -43,6 +43,8 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 	string text, pattern, origText;
 	vector<int> timeToFindFirst;
 	vector<int> timeToFindAll;
+	vector<string> multiplePatterns = {"the", "because", "Potter", "and", "Harry", "Dursley", "sister", "good", "neighbor", "keeping", "child", "strange", "mysterious", "nothing" };
+
 	chrono::duration<double, micro> timeMilli;
 
 	text = getTextFromFile(txtF);
@@ -58,7 +60,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		BFall = bf1.findAll();
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
-		BFtotalTime += timeMILLi;
+		BFtotalTime += timeMilli;
 	}
 
 	double KMPtotalTime = 0.0
@@ -73,6 +75,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 	}
 
 	assert((BFall == KMPall));
+
 	for(int i = KMPall.size(); i >0; i--) //making it html friendly
 		fixText(text, KMPall[i-1], pattern.size());
 
@@ -88,12 +91,15 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 
 	begin = chrono::steady_clock::now();
 	RabinKarp rk(text, pattern);
+	rk.search();
 	rk.findAll();
+	rk.findMultiple(multiplePatterns);
+
 	end = chrono::steady_clock::now();
 	timeMilli = end - begin;
 	auto RKtime = timeMilli.count();
 	cout<<"RabinKarp: time diff in microsecs is " << timeMilli.count()<<endl;
-	
+
 	printTimes(KMPall.size(), BFtime, KMPtime, RKtime, oFile);
 }
 

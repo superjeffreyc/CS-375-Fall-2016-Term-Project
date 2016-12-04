@@ -1,6 +1,6 @@
 #include "RabinKarp.h"
 #include <iostream>
-
+#include <set>
 using namespace std;
 
 RabinKarp::RabinKarp(std::string text, std::string pattern) : text(text), pattern(pattern) {
@@ -13,6 +13,37 @@ RabinKarp::RabinKarp(std::string text, std::string pattern) : text(text), patter
 
 	// Calculate value of most significant character: primeNumber ^ (patternLength-1)
 	MSCfactor = calculateMSCFactor();
+}
+
+vector<vector<int>> RabinKarp::findMultiple(vector<string> patterns){
+	vector<int> hashes;
+	vector<vector<int>> multipleIndices;
+
+	for (int i = 0; i < patterns.size(); i++) {
+		hashes.push_back(calculateInitialHash(patterns[i]));
+	}
+
+	// Slide the text window and check for a matching pattern
+	for (int currentIndex = 0; currentIndex <= lastSubstringIndex; currentIndex++) {
+
+		// Compare hashes and verify that they are the same string
+		int index = -1;
+		for (int j = 0; j < hashes.size(); j++) {
+			if (hashes[j] == textHash) {
+				index = j;
+				break;
+			}
+		}
+		if (index != -1 && compareMultipleStrings(currentIndex, patterns[index])) {
+			multipleIndices[index].push_back(currentIndex);
+		}
+
+		// Calculate rolling hash - remove most significant character (at currentIndex) and add next character after the window
+		calculateRollingHash(currentIndex);
+	}
+
+	return multipleIndices;
+
 }
 
 vector<int> RabinKarp::findAll(){
@@ -80,6 +111,13 @@ int RabinKarp::calculateInitialHash(string substring) {
 
 // Check for identical strings
 bool RabinKarp::compareStrings(int currentIndex) {
+	for (int i = 0; i < pattern.length(); i++) {
+		if (text[currentIndex+i] != pattern[i]) return false;
+	}
+	return true;
+}
+
+bool RabinKarp::compareMultipleStrings(int currentIndex, string pattern) {
 	for (int i = 0; i < pattern.length(); i++) {
 		if (text[currentIndex+i] != pattern[i]) return false;
 	}
