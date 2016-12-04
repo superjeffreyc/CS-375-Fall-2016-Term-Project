@@ -19,6 +19,26 @@ RabinKarp::RabinKarp(std::string text, std::string pattern) : text(text), patter
 	textHash = calculateInitialHash(text);
 }
 
+vector<int> RabinKarp::findAll(){
+
+	vector<int> indices;
+
+	// Slide the text window and check for a matching pattern
+	for (int currentIndex = 0; currentIndex <= lastSubstringIndex; currentIndex++) {
+
+		// Compare hashes and verify that they are the same string
+		if (patternHash == textHash && compareStrings(currentIndex)) {
+			indices.push_back(currentIndex);
+		}
+
+		// Calculate rolling hash - remove most significant character (at currentIndex) and add next character after the window
+		calculateRollingHash(currentIndex);
+	}
+
+	return indices;
+
+}
+
 int RabinKarp::search(){
 
 	// Slide the text window and check for a matching pattern

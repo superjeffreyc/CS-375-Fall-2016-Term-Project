@@ -17,6 +17,7 @@ class RabinKarp : public StringSearch {
 public:
 	RabinKarp(std::string, std::string);
 	int search();
+	std::vector<int> findAll();
 
 private:
 	int calculateMSCFactor();

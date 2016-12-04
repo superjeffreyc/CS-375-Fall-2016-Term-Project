@@ -39,7 +39,7 @@ void testStringSearches(){
 	string pattern;
 	vector<int> timeToFindFirst;
 	vector<int> timeToFindAll;
-	
+
 	text = getTextFromFile("../test/t3Text.txt");
 	pattern = getTextFromFile("../test/t3Pattern.txt");
 	//getting rid of newline char at the end
@@ -48,11 +48,11 @@ void testStringSearches(){
 
 	auto begin = chrono::steady_clock::now();
 	BruteForce bf1(text, pattern);
-	int BFfirst = bf1.search();
 	vector<int> BFall = bf1.findAll();
 	auto end = chrono::steady_clock::now();
 	chrono::duration<double, micro> timeMilli = end - begin;
-	cout<<"time diff in microsecs is " << timeMilli.count()<<endl;
+	cout<<"BruteForce: time diff in microsecs is " << timeMilli.count()<<endl;
+	int BFfirst = bf1.search();
 
 	KMPSearch kmp1(text, pattern);
 	int KMPfirst = kmp1.search();
@@ -62,15 +62,23 @@ void testStringSearches(){
 	cout<<"pattern is of KMPall is "<<KMPall.size()<<endl;
 	for(int i = KMPall.size(); i >0; i--) //making it html friendly
 		fixText(text, KMPall[i-1], pattern.size());
-	
+
 	printHTML(text, KMPall);
-	/*
+
+	begin = chrono::steady_clock::now();
+	KMPSearch kmp(text, pattern);
+	kmp.findAll();
+	end = chrono::steady_clock::now();
+	timeMilli = end - begin;
+	cout<<"KMP: time diff in microsecs is " << timeMilli.count()<<endl;
+
+	begin = chrono::steady_clock::now();
 	RabinKarp rk(text, pattern);
-	ret = rk.search();
-	cout << "Rabin-Karp: ";
-	if (ret == -1) cout << "Couldn't find pattern in text!" << endl;
-	else printFoundText(text, ret, pattern.size());
-	*/
+	rk.findAll();
+	end = chrono::steady_clock::now();
+	timeMilli = end - begin;
+	cout<<"RabinKarp: time diff in microsecs is " << timeMilli.count()<<endl;
+
 }
 
 int main(){
