@@ -7,20 +7,18 @@
 
 using namespace std;
 
-string printFoundText(string &text, int start, int len){
+void printFoundText(string text, int start, int len){
 	text.insert((start+len), " ] ");
 	text.insert((start), " [ ");
-	return text;
+	cout << "Location in text is " << text << endl;
 }
 
 int main(){
-	string text, rktext, kmptext;
+	string text;
 	string pattern;
 
 	cout << "Enter text to search and hit <Enter>" << endl;
 	cin >> text;
-	rktext = text;
-	kmptext = text;
 
 	cout << "Enter pattern to serarch for and hit <Enter>" << endl;
 	cin >> pattern;
@@ -32,20 +30,19 @@ int main(){
 	if(ret == -1)
 		cout << "Couldn't find pattern in text!" << endl;
 	else
-		cout << " Location in text is " << printFoundText(text, ret,
-											pattern.size()) << endl;
+		 printFoundText(text, ret, pattern.size());
 
-	RabinKarp rk(rktext, pattern);
+	RabinKarp rk(text, pattern);
 	ret = rk.search();
 	cout << "Rabin-Karp: ";
 	if (ret == -1) cout << "Couldn't find pattern in text!" << endl;
-	else cout << " Location in text is " << printFoundText(rktext, ret, pattern.size()) << endl;
+	else printFoundText(text, ret, pattern.size());
 
-	KMPSearch kmp(kmptext, pattern);
+	KMPSearch kmp(text, pattern);
 	ret = kmp.search();
 	cout << "KMP: ";
 	if (ret == -1) cout << "Couldn't find pattern in text!" << endl;
-	else cout << " Location in text is " << printFoundText(kmptext, ret, pattern.size()) << endl;
+	else printFoundText(text, ret, pattern.size());
 
 
 	return 0;
