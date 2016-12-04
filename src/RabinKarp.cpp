@@ -3,20 +3,23 @@
 
 using namespace std;
 
-RabinKarp::RabinKarp(std::string text, std::string pattern) :
-							text(text), pattern(pattern) {}
+RabinKarp::RabinKarp(std::string text, std::string pattern) : text(text), pattern(pattern) {
 
-int RabinKarp::search(){
+	// So we know when to stop searching substrings
+	lastSubstringIndex = text.length() - pattern.length();
 
-	int lastSubstringIndex = text.length() - pattern.length();
-	int patternHash, textHash;
+	// Set up base value for calculating hashes
+	primeNumber = 199;
 
-	// Set up prime number for hashing and calculate most significant character factor
-	hashPreparations();
+	// Calculate value of most significant character: primeNumber ^ (patternLength-1)
+	MSCfactor = calculateMSCFactor();
 
 	// Generate hash values for the pattern and the first text window
 	patternHash = calculateInitialHash(pattern);
 	textHash = calculateInitialHash(text);
+}
+
+int RabinKarp::search(){
 
 	// Slide the text window and check for a matching pattern
 	for (int currentIndex = 0; currentIndex <= lastSubstringIndex; currentIndex++) {
@@ -26,8 +29,8 @@ int RabinKarp::search(){
 			return currentIndex;
 		}
 
-		// Calculate rolling hash - remove most significant character and add next character
-		textHash = calculateRollingHash(textHash, currentIndex, lastSubstringIndex);
+		// Calculate rolling hash - remove most significant character (at currentIndex) and add next character after the window
+		calculateRollingHash(currentIndex);
 	}
 
 	return -1;	// Could not find the pattern
@@ -64,18 +67,9 @@ bool RabinKarp::compareStrings(int currentIndex) {
 }
 
 // Rolling hash - remove most significant character and add next character. Runs in O(1)
-int RabinKarp::calculateRollingHash(int textHash, int currentIndex, int lastSubstringIndex) {
+void RabinKarp::calculateRollingHash(int currentIndex) {
 	if (currentIndex < lastSubstringIndex) {
 		textHash = primeNumber*(textHash - text[currentIndex]*MSCfactor);	// Remove most significant character
 		textHash += text[currentIndex+pattern.length()];					// Add next character
 	}
-	return textHash;	// No more substrings left
-}
-
-void RabinKarp::hashPreparations() {
-	// Base value for calculating hashes
-	primeNumber = 199;
-
-	// Calculate value of most significant character: primeNumber ^ (patternLength-1)
-	MSCfactor = calculateMSCFactor();
 }
