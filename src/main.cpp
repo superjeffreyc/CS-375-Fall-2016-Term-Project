@@ -17,22 +17,17 @@ void fixText(string &text, int start, int len){
 	text.insert((start), "<span style = \"background-color: #FFFF00\">");
 }
 
-void printTimes(int matches, double BFtime, double KMPtime, double RKtime, string oFile){
-	ofstream myFile(oFile, ios_base::app);
-	myFile << "There were " << matches << "matches.<br>";
-	myFile << "Brute force took " << BFtime << " microseconds.<br>";
-	myFile << "Knuth-Morris Pratt took " << KMPtime << " microseconds.<br>";
-	myFile << "Rabin Karp took " << RKtime << " microseconds.<br>";
-	myFile << "</body></html>";
-	myFile.close();
-}
-
-void printHTML(string text, vector<int> locations, string oFile){ //print out time as well
+void printHTML(string text, vector<int> locations, string oFile, int matches, 
+				double BFtime, double KMPtime, double RKtime){ 
 	ofstream myFile(oFile);
 	myFile << "<!DOCTYPE html><html><head></head><body>";
 	myFile << text;
 	myFile << "<br><br><br>";
-	myFile.close();
+	myFile << "There were " << matches << " matches.<br>";
+	myFile << "Brute force took " << BFtime << " microseconds.<br>";
+	myFile << "Knuth-Morris Pratt took " << KMPtime << " microseconds.<br>";
+	myFile << "Rabin Karp took " << RKtime << " microseconds.<br>";
+	myFile << "</body></html>";
 }
 
 string getTextFromFile(string path){
@@ -48,27 +43,36 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 	string text, pattern, origText;
 	vector<int> timeToFindFirst;
 	vector<int> timeToFindAll;
+	chrono::duration<double, micro> timeMilli;
 
 	text = getTextFromFile(txtF);
 	pattern = getTextFromFile(ptFile);
-	//getting rid of newline char at the end
 	text.erase(remove(text.begin(), text.end(), '\n'), text.end());
 	pattern.erase(remove(pattern.begin(), pattern.end(), '\n'), pattern.end());
 
-	auto begin = chrono::steady_clock::now();
-	BruteForce bf1(text, pattern);
-	vector<int> BFall = bf1.findAll();
-	auto end = chrono::steady_clock::now();
-	chrono::duration<double, micro> timeMilli = end - begin;
-	auto BFtime = timeMilli.count();
-	cout<<"BruteForce: time diff in microsecs is " << timeMilli.count()<<endl;
-	int BFfirst = bf1.search();
+	double BFtotalTime = 0.0;
+	vector<int> BFall;
+	for(int i=0; i < 100; i++){
+		auto begin = chrono::steady_clock::now();
+		BruteForce bf1(text, pattern);
+		BFall = bf1.findAll();
+		auto end = chrono::steady_clock::now();
+		timeMilli = end - begin;
+		BFtotalTime += timeMILLi;
+	}
 
-	KMPSearch kmp1(text, pattern);
-	int KMPfirst = kmp1.search();
-	vector<int> KMPall = kmp1.findAll();
+	double KMPtotalTime = 0.0
+	vector<int> KMPall;
+	for(int i=0; i<100; i++){
+		auto begin = chrono::steady_clock::now();
+		BruteForce KMPrun(text, pattern);
+		KMPall = KMPrun.findAll();
+		auto end = chrono::steady_clock::now();
+		timeMilli = end - begin;
+		KMPtotalTime += timeMILLi;
+	}
 
-	assert((BFfirst == KMPfirst) && (BFall == KMPall));
+	assert((BFall == KMPall));
 	for(int i = KMPall.size(); i >0; i--) //making it html friendly
 		fixText(text, KMPall[i-1], pattern.size());
 
@@ -97,7 +101,6 @@ int main(int argc, char **argv){
 	if(argc != 4){
 		cout << "./SearchComparisons <text file> <pattern file> <output file name>"<<endl;
 	}
-	testStringSearches(argv[1], argv[2], argv[3]);
 
 	return 0;
 }
