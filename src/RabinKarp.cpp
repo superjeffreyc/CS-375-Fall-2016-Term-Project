@@ -13,13 +13,11 @@ RabinKarp::RabinKarp(std::string text, std::string pattern) : text(text), patter
 
 	// Calculate value of most significant character: primeNumber ^ (patternLength-1)
 	MSCfactor = calculateMSCFactor();
-
-	// Generate hash values for the pattern and the first text window
-	patternHash = calculateInitialHash(pattern);
-	textHash = calculateInitialHash(text);
 }
 
 vector<int> RabinKarp::findAll(){
+
+	preprocessHashes();
 
 	vector<int> indices;
 
@@ -40,6 +38,8 @@ vector<int> RabinKarp::findAll(){
 }
 
 int RabinKarp::search(){
+
+	preprocessHashes();
 
 	// Slide the text window and check for a matching pattern
 	for (int currentIndex = 0; currentIndex <= lastSubstringIndex; currentIndex++) {
@@ -92,4 +92,10 @@ void RabinKarp::calculateRollingHash(int currentIndex) {
 		textHash = primeNumber*(textHash - text[currentIndex]*MSCfactor);	// Remove most significant character
 		textHash += text[currentIndex+pattern.length()];					// Add next character
 	}
+}
+
+// Generate hash values for the pattern and the first text window
+void RabinKarp::preprocessHashes() {
+	patternHash = calculateInitialHash(pattern);
+	textHash = calculateInitialHash(text);
 }
