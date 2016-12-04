@@ -3,15 +3,17 @@
 BruteForce::BruteForce(std::string text, std::string pattern) : 
 									text(text), pattern(pattern){}
 
-
 // Naive brute force implementation for finding the next location of pattern
-
 bool BruteForce::searchHelper(int &tIndex){
 	for(;tIndex < text.size(); tIndex++){
 		if(pattern[0] == text[tIndex]){
 			for(int j = 1; j < pattern.size(); j++){
-				if(pattern[j] != text[tIndex+j]) break;
-				if(j == (pattern.size()-1)) return true;
+				if(pattern[j] != text[tIndex+j]) 
+					break;
+				if(j == (pattern.size()-1)){ //double check this logic
+					tIndex++;			//was causing a nasty bug earlier
+					return true;
+				}
 			}
 		}
 	}
@@ -22,7 +24,7 @@ int BruteForce::search(){
 	int tIndex = 0;
 	bool found = searchHelper(tIndex);
 	if(found)
-		return tIndex;
+		return (tIndex-1);
 	else
 		return -1;
 }
@@ -34,7 +36,7 @@ std::vector<int> BruteForce::findAll(){
 	while(found){
 		found = searchHelper(tIndex);
 		if(found)
-			locations.push_back(tIndex);
+			locations.push_back((tIndex-1));
 	}
 	return locations;
 }

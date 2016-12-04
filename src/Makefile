@@ -24,3 +24,4 @@ run: all
 	
 clean:
 	rm *.o SearchComparisons
+	rm ../test/*.html
