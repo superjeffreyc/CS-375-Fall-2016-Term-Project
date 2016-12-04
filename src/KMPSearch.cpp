@@ -15,7 +15,7 @@ void KMPSearch::printSuffixArray(){
 	std::cout << "~~~Printing suffix arr~~~"<<std::endl;
 	for(int i = 0; i < pSize; i++)
 		std::cout<<suffixArr[i]<< " ";
-	std::cout << "\n~~~Done Printing~~~ "<<std::endl;
+	std::cout << "\n~~~Done Printing~~~"<<std::endl;
 }
 
 //computing prefix-suffix array for KMP Search

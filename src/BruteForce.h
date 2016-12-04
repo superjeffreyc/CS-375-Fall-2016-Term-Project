@@ -2,6 +2,7 @@
 #define BRUTE_FORCE_H
 
 #include <string>
+#include <vector>
 
 #include "StringSearch.h"
 
@@ -11,7 +12,9 @@ class BruteForce : public StringSearch {
 
 public:
 	BruteForce(std::string, std::string);
+	bool searchHelper(int &tIndex);
 	int search();
+	std::vector<int> findAll();
 };
 
 #endif
