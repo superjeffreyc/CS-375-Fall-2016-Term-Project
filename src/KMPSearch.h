@@ -23,7 +23,7 @@ public:
 	std::vector<int> findAll();
 	void printSuffixArray();
 	std::vector<std::vector<int>> findMultiple(std::vector<std::string> patterns);
-	
+
 	//~KMPSearch();
 };
 

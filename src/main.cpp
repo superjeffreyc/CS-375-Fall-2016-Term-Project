@@ -56,7 +56,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		auto begin = chrono::steady_clock::now();
 		BruteForce bf1(text, pattern);
 		BFall = bf1.findAll();
-		// bf1.findMultiple(multiplePatterns);
+		bf1.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		BFtotalTime += timeMilli.count();
@@ -69,6 +69,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		auto begin = chrono::steady_clock::now();
 		KMPSearch KMPrun(text, pattern);
 		KMPall = KMPrun.findAll();
+		KMPrun.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		KMPtotalTime += timeMilli.count();
@@ -81,7 +82,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		auto begin = chrono::steady_clock::now();
 		RabinKarp RKrun(text, pattern);
 		RKall = RKrun.findAll();
-		// RKrun.findMultiple(multiplePatterns);
+		RKrun.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		RKtotalTime += timeMilli.count();

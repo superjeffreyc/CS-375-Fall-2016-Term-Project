@@ -23,12 +23,12 @@ void KMPSearch::printSuffixArray(){
 void KMPSearch::computeSuffixArr(){
 	int j=0;
 	for(int i=1; i<pSize;i++){
-		if(pattern[i] == pattern[j]) 
+		if(pattern[i] == pattern[j])
 			suffixArr[i] = ++j;
 		else if(j != 0){ //if not at beginning of pattern - use prefix-suffix
 			i--; 	//array to move locations and prevent loop increment
 			j=suffixArr[j-1];
-		}//else increment i and move on 
+		}//else increment i and move on
 	}
 	//printSuffixArray();
 }
@@ -46,7 +46,7 @@ bool KMPSearch::KMPSearchHelper(int &tIndex){
 				tIndex++;
 			}
 		}
-		return (pIndex == pSize); //did we find a location? 
+		return (pIndex == pSize); //did we find a location?
 }								//it's stored in tIndex
 
 //finds all locations of pattern
@@ -66,7 +66,7 @@ std::vector<int> KMPSearch::findAll(){
 int KMPSearch::search(){
 	int tIndex = 0;
 	bool found = KMPSearchHelper(tIndex);
-	if(found) 
+	if(found)
 		return (tIndex - pSize);
 	else
 		return -1;
@@ -82,6 +82,8 @@ std::vector<std::vector<int>> KMPSearch::findMultiple(std::vector<std::string> p
 		computeSuffixArr();
 		ret.push_back(findAll());
 	}
+
+	return ret;
 }
 
 //cleaning up prefix suffix arr
