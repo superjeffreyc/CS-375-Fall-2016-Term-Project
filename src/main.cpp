@@ -59,7 +59,6 @@ void testStringSearches(){
 	vector<int> KMPall = kmp1.findAll();
 
 	assert((BFfirst == KMPfirst) && (BFall == KMPall));
-	cout<<"pattern is of KMPall is "<<KMPall.size()<<endl;
 	for(int i = KMPall.size(); i >0; i--) //making it html friendly
 		fixText(text, KMPall[i-1], pattern.size());
 
