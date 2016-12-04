@@ -12,7 +12,7 @@ class KMPSearch : public StringSearch {
 	std::string pattern;
 	int pSize;
 	int tSize;
-	int *suffixArr; 
+	std::vector<int> suffixArr;
 
 public:
 	KMPSearch(std::string textP, std::string patternP);
@@ -22,8 +22,9 @@ public:
 	int search();
 	std::vector<int> findAll();
 	void printSuffixArray();
+	std::vector<std::vector<int>> findMultiple(std::vector<std::string> patterns);
 	
-	~KMPSearch();
+	//~KMPSearch();
 };
 
 #endif

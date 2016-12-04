@@ -5,7 +5,8 @@ KMPSearch::KMPSearch(std::string textP, std::string patternP){
 	pattern = patternP;
 	pSize = pattern.size(); //easier to type vars
 	tSize = text.size();
-	suffixArr = new int[pSize](); //auto initialize to 0
+	suffixArr.resize(patternP.size());
+	//suffixArr(patternP.size()); //auto initialize to 0
 
 	computeSuffixArr();
 }
@@ -71,8 +72,20 @@ int KMPSearch::search(){
 		return -1;
 }
 
-//cleaning up prefix suffix arr
-KMPSearch::~KMPSearch(){
-	delete[] suffixArr;
+std::vector<std::vector<int>> KMPSearch::findMultiple(std::vector<std::string> patterns){
+	std::vector<std::vector<int>> ret;
+	for(int i =0; i < patterns.size(); i++){
+		suffixArr.clear();
+		pSize = patterns[i].size();
+
+		suffixArr.resize(patterns[i].size());//suffixArr(patterns[i]);
+		computeSuffixArr();
+		ret.push_back(findAll());
+	}
 }
+
+//cleaning up prefix suffix arr
+/*KMPSearch::~KMPSearch(){
+	delete[] suffixArr;
+}*/
 
