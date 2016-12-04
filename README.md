@@ -33,9 +33,8 @@ Knuth Morris Pratt Algorithm
 ## How To Run
 ```sh
 	$ make
-	$ ./SearchComparisons
-	$ cd ../test/
-	$ firefox t3Output.html &
+	$ ./SearchComparisons ../test/t4Text.txt ../test/t4Pattern.txt output.html
+	$ firefox output.html & 
 ```
 Change up the test files to see different ones in html with highlight	
 

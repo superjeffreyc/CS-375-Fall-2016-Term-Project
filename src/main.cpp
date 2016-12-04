@@ -37,8 +37,6 @@ string getTextFromFile(string path){
 	return textBuffer.str();
 }
 
-//indices start from 1
-//should it handle lowercase?
 void testStringSearches(string txtF, string ptFile, string oFile){
 	string text, pattern, origText;
 	vector<int> timeToFindFirst;
