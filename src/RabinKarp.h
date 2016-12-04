@@ -11,8 +11,8 @@ class RabinKarp : public StringSearch {
 	int MSCfactor;				// Most significant character multiplier
 	int lastSubstringIndex;
 
-	int patternHash;
-	int textHash;
+	int patternHash = 0;
+	int textHash = 0;
 
 public:
 	RabinKarp(std::string, std::string);
@@ -24,6 +24,7 @@ private:
 	int calculateInitialHash(std::string substring);
 	bool compareStrings(int currentIndex);
 	void calculateRollingHash(int currentIndex);
+	void preprocessHashes();
 };
 
 #endif
