@@ -52,11 +52,12 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 
 	double BFtotalTime = 0.0;
 	vector<int> BFall;
+	vector<vector<int>> BFMultipleAll;
 	for(int i=0; i < 100; i++){
 		auto begin = chrono::steady_clock::now();
 		BruteForce bf1(text, pattern);
 		BFall = bf1.findAll();
-		bf1.findMultiple(multiplePatterns);
+		BFMultipleAll = bf1.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		BFtotalTime += timeMilli.count();
@@ -65,11 +66,12 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 
 	double KMPtotalTime = 0.0;
 	vector<int> KMPall;
+	vector<vector<int>> KMPMultipleAll;
 	for(int i=0; i<100; i++){
 		auto begin = chrono::steady_clock::now();
 		KMPSearch KMPrun(text, pattern);
 		KMPall = KMPrun.findAll();
-		KMPrun.findMultiple(multiplePatterns);
+		KMPMultipleAll = KMPrun.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		KMPtotalTime += timeMilli.count();
@@ -78,11 +80,12 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 
 	double RKtotalTime = 0.0;
 	vector<int> RKall;
+	vector<vector<int>> RKMultipleAll;
 	for(int i=0; i<100; i++){
 		auto begin = chrono::steady_clock::now();
 		RabinKarp RKrun(text, pattern);
 		RKall = RKrun.findAll();
-		RKrun.findMultiple(multiplePatterns);
+		RKMultipleAll = RKrun.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		RKtotalTime += timeMilli.count();
@@ -90,6 +93,11 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 	RKtotalTime /= 100.0;
 
 	assert((BFall == KMPall) && (RKall == KMPall));
+	cout << "size was " << BFall.size() << endl;
+	//assert((BFMultipleAll == KMPMultipleAll) && (KMPMultipleAll == RKMultipleAll));
+	cout << "multiple size was " << KMPMultipleAll.size() << endl;
+	cout << "multiple 2size was " << BFMultipleAll.size() << endl;
+	cout << "multiple3 size was " << RKMultipleAll.size() << endl;
 	for(int i = KMPall.size(); i >0; i--) //making it html friendly
 		fixText(text, KMPall[i-1], pattern.size());
 
