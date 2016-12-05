@@ -37,7 +37,7 @@ string getTextFromFile(string path){
 	return textBuffer.str();
 }
 
-void testStringSearches(string txtF, string ptFile, string oFile){
+void testStringSearches(string txtF, string ptFile, string oFile, string flag){
 	string text, pattern, origText;
 	vector<int> timeToFindFirst;
 	vector<int> timeToFindAll;
@@ -58,7 +58,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		auto begin = chrono::steady_clock::now();
 		BruteForce bf1(text, pattern);
 		BFall = bf1.findAll();
-		BFMultipleAll = bf1.findMultiple(multiplePatterns);
+		if (flag == "multiple") BFMultipleAll = bf1.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		BFtotalTime += timeMilli.count();
@@ -72,7 +72,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		auto begin = chrono::steady_clock::now();
 		KMPSearch KMPrun(text, pattern);
 		KMPall = KMPrun.findAll();
-		KMPMultipleAll = KMPrun.findMultiple(multiplePatterns);
+		if (flag == "multiple") KMPMultipleAll = KMPrun.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		KMPtotalTime += timeMilli.count();
@@ -86,7 +86,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		auto begin = chrono::steady_clock::now();
 		RabinKarp RKrun(text, pattern);
 		RKall = RKrun.findAll();
-		RKMultipleAll = RKrun.findMultiple(multiplePatterns);
+		if (flag == "multiple") RKMultipleAll = RKrun.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		RKtotalTime += timeMilli.count();
@@ -94,23 +94,26 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 	RKtotalTime /= (double)sampleSize;
 
 	assert((BFall == KMPall) && (RKall == KMPall));
-	cout << "size was " << BFall.size() << endl;
 
-	assert(BFMultipleAll == KMPMultipleAll);
-	assert(BFMultipleAll == RKMultipleAll);
-	cout << "multiple size was " << KMPMultipleAll.size() << endl;
-	cout << "multiple 2size was " << BFMultipleAll.size() << endl;
-	cout << "multiple3 size was " << RKMultipleAll.size() << endl;
-	for(int i = KMPall.size(); i >0; i--) //making it html friendly
-		fixText(text, KMPall[i-1], pattern.size());
+	if (flag == "multiple") {
+		assert(BFMultipleAll == KMPMultipleAll);
+		assert(BFMultipleAll == RKMultipleAll);
+	}
+	else {
+		for(int i = KMPall.size(); i >0; i--) //making it html friendly
+			fixText(text, KMPall[i-1], pattern.size());
+	}
 
 	printHTML(text, KMPall, oFile, KMPall.size(), BFtotalTime, KMPtotalTime, RKtotalTime);
+
 }
 
 int main(int argc, char **argv){
-	if(argc != 4){
-		cout << "./SearchComparisons <text file> <pattern file> <output file name>"<<endl;
+	if(argc < 4){
+		cout << "./SearchComparisons <text file> <pattern file> <output file name> <multiple flag>"<<endl;
 	}
-	testStringSearches(argv[1], argv[2], argv[3]);
+	if (argc == 4) testStringSearches(argv[1], argv[2], argv[3], "without multiple");
+	else if (argc == 5) testStringSearches(argv[1], argv[2], argv[3], argv[4]);
+
 	return 0;
 }
