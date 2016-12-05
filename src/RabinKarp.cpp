@@ -45,11 +45,9 @@ vector<vector<int>> RabinKarp::findMultiple(vector<string> patterns){
 		auto range = hashToStringMap.equal_range(textHash);
 
 		for (auto it = range.first; it != range.second; it++) {
-
 			if (compareStrings(currentIndex, it->second)) {
 				auto indexIter = stringToIndexMap.find(it->second);
 				multipleIndices[indexIter->second].push_back(currentIndex);
-				break;
 			}
 		}
 
