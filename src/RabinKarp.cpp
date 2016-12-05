@@ -11,29 +11,25 @@ RabinKarp::RabinKarp(std::string text, std::string pattern) : text(text), patter
 	primeNumber = 199;
 
 	// Calculate value of most significant character: primeNumber ^ (patternLength-1)
-	MSCfactor = calculateMSCFactor();
+	MSCfactor = calculateMSCFactor(pattern.length());
 }
 
 vector<vector<int>> RabinKarp::findMultiple(vector<string> patterns){
 	unordered_multimap<int, string> hashToStringMap;
 	unordered_multimap<string, int> stringToIndexMap;
+
 	int minLength = getMinLength(patterns);
+	MSCfactor = calculateMSCFactor(minLength);
 	textHash = calculateInitialHash(text.substr(0, minLength));
 	lastSubstringIndex = text.length() - minLength;
 
 	vector<vector<int>> multipleIndices;
-	multipleIndices.reserve(patterns.size());
-
-	for (int i = 0; i < patterns.size(); i++) {
-		vector<int> tempVector;
-		tempVector.reserve(10);
-		multipleIndices.push_back(tempVector);
-	}
+	multipleIndices.resize(patterns.size());
 
 	// Initial hashes
 	for (int i = 0; i < patterns.size(); i++) {
 		hashToStringMap.insert(
-			{ calculateInitialHash(patterns[i]), patterns[i] }
+			{ calculateInitialHash(patterns[i].substr(0, minLength)), patterns[i] }
 		);
 
 		// For figuring out what index to put a matching pattern to
@@ -49,6 +45,7 @@ vector<vector<int>> RabinKarp::findMultiple(vector<string> patterns){
 		auto range = hashToStringMap.equal_range(textHash);
 
 		for (auto it = range.first; it != range.second; it++) {
+
 			if (compareStrings(currentIndex, it->second)) {
 				auto indexIter = stringToIndexMap.find(it->second);
 				multipleIndices[indexIter->second].push_back(currentIndex);
@@ -108,10 +105,10 @@ int RabinKarp::search(){
 }
 
 // Calculate multiplier for most significant character
-int RabinKarp::calculateMSCFactor() {
+int RabinKarp::calculateMSCFactor(int length) {
 	int MSCfactor = 1;
 
-	for (int i = 0; i < pattern.length()-1; i++) {
+	for (int i = 0; i < length-1; i++) {
 		MSCfactor = (MSCfactor*primeNumber);
 	}
 
@@ -162,4 +159,6 @@ int RabinKarp::getMinLength(std::vector<std::string> patterns) {
 	for (int i = 1; i < patterns.size(); i++) {
 		if (patterns[i].length() < min) min = patterns[i].length();
 	}
+
+	return min;
 }

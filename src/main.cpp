@@ -41,8 +41,9 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 	string text, pattern, origText;
 	vector<int> timeToFindFirst;
 	vector<int> timeToFindAll;
-	vector<string> multiplePatterns = {"the", "because", "Potter", "and", "Harry", "Dursley", "sister", "good", "neighbor", "keeping", "child", "strange", "mysterious", "nothing", "Tuesday", "mixing", "hummed", "boring", "for", "son"   };
+	vector<string> multiplePatterns = {"the", "because", "Potter", "and", "Harry", "Dursley", "sister", "good", "neighbor", "keeping", "child", "strange", "mysterious", "nothing", "Tuesday", "mixing", "hummed", "boring", "for", "son", "verylargeword", "evenlargerword", "veryveryverylargeword", "thisphrasedoesnotexist"  };
 
+	int sampleSize = 1000;
 	chrono::duration<double, micro> timeMilli;
 
 	text = getTextFromFile(txtF);
@@ -53,7 +54,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 	double BFtotalTime = 0.0;
 	vector<int> BFall;
 	vector<vector<int>> BFMultipleAll;
-	for(int i=0; i < 100; i++){
+	for(int i=0; i < sampleSize; i++){
 		auto begin = chrono::steady_clock::now();
 		BruteForce bf1(text, pattern);
 		BFall = bf1.findAll();
@@ -62,12 +63,12 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		timeMilli = end - begin;
 		BFtotalTime += timeMilli.count();
 	}
-	BFtotalTime /= 100.0;
+	BFtotalTime /= (double)sampleSize;
 
 	double KMPtotalTime = 0.0;
 	vector<int> KMPall;
 	vector<vector<int>> KMPMultipleAll;
-	for(int i=0; i<100; i++){
+	for(int i=0; i<sampleSize; i++){
 		auto begin = chrono::steady_clock::now();
 		KMPSearch KMPrun(text, pattern);
 		KMPall = KMPrun.findAll();
@@ -76,12 +77,12 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		timeMilli = end - begin;
 		KMPtotalTime += timeMilli.count();
 	}
-	KMPtotalTime /= 100.0;
+	KMPtotalTime /= (double)sampleSize;
 
 	double RKtotalTime = 0.0;
 	vector<int> RKall;
 	vector<vector<int>> RKMultipleAll;
-	for(int i=0; i<100; i++){
+	for(int i=0; i<sampleSize; i++){
 		auto begin = chrono::steady_clock::now();
 		RabinKarp RKrun(text, pattern);
 		RKall = RKrun.findAll();
@@ -90,11 +91,13 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		timeMilli = end - begin;
 		RKtotalTime += timeMilli.count();
 	}
-	RKtotalTime /= 100.0;
+	RKtotalTime /= (double)sampleSize;
 
 	assert((BFall == KMPall) && (RKall == KMPall));
 	cout << "size was " << BFall.size() << endl;
-	//assert((BFMultipleAll == KMPMultipleAll) && (KMPMultipleAll == RKMultipleAll));
+
+	assert(BFMultipleAll == KMPMultipleAll);
+	assert(BFMultipleAll == RKMultipleAll);
 	cout << "multiple size was " << KMPMultipleAll.size() << endl;
 	cout << "multiple 2size was " << BFMultipleAll.size() << endl;
 	cout << "multiple3 size was " << RKMultipleAll.size() << endl;

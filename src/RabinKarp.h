@@ -21,7 +21,7 @@ public:
 	std::vector<std::vector<int>> findMultiple(std::vector<std::string>);
 
 private:
-	int calculateMSCFactor();
+	int calculateMSCFactor(int length);
 	int calculateInitialHash(std::string substring);
 	bool compareStrings(int currentIndex, std::string pattern);
 	void calculateRollingHash(int currentIndex, int patternLength);
