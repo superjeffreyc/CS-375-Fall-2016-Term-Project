@@ -22,13 +22,10 @@ Knuth Morris Pratt Algorithm
 - (explanation)
 
 ## Things to Finish
-- split main file into multiple functions with testing and timing seperated
-- integrate RK in testing
-- create more test cases
-- have html file show time for each algo as well
-- litter code with more comments? (probably not needed though)
-- change highlighting color and/or method
-- change up html doc to make it better presentation?
+- create more test cases (backpack for KMP) (harry potter for random) (RK - )
+- change highlighting color for each find multiple word
+- make command line arg to take another flag for running multiple patterns
+- finish ppt KMP
 
 ## How To Run
 ```sh
@@ -36,5 +33,9 @@ Knuth Morris Pratt Algorithm
 	$ ./SearchComparisons ../test/t4Text.txt ../test/t4Pattern.txt output.html
 	$ firefox output.html & 
 ```
-Change up the test files to see different ones in html with highlight	
+or 
+```sh
+	$ make run
+	firefox output.html &
+```
 
