@@ -18,12 +18,12 @@ void fixText(string &text, int start, int len){
 }
 
 void printHTML(string text, vector<int> locations, string oFile, int matches,
-				double BFtime, double KMPtime, double RKtime){
+				double BFtime, double KMPtime, double RKtime, string flag){
 	ofstream myFile(oFile);
 	myFile << "<!DOCTYPE html><html><head></head><body>";
 	myFile << text;
 	myFile << "<br><br><br>";
-	myFile << "There were " << matches << " matches.<br>";
+	if (flag != "multiple") myFile << "There were " << matches << " matches.<br>";
 	myFile << "Brute force took " << BFtime << " microseconds.<br>";
 	myFile << "Knuth-Morris Pratt took " << KMPtime << " microseconds.<br>";
 	myFile << "Rabin Karp took " << RKtime << " microseconds.<br>";
@@ -41,7 +41,7 @@ void testStringSearches(string txtF, string ptFile, string oFile, string flag){
 	string text, pattern, origText;
 	vector<int> timeToFindFirst;
 	vector<int> timeToFindAll;
-	vector<string> multiplePatterns = {"the", "because", "Potter", "and", "Harry", "Dursley", "sister", "good", "neighbor", "keeping", "child", "strange", "mysterious", "nothing", "Tuesday", "mixing", "hummed", "boring", "for", "son", "verylargeword", "evenlargerword", "veryveryverylargeword", "thisphrasedoesnotexist" };
+	vector<string> multiplePatterns = {"the", "because", "Potter", "and", "Harry", "Dursley", "sister", "good", "neighbor", "keeping", "child", "strange", "mysterious", "nothing", "Tuesday", "mixing", "hummed", "boring", "for", "son", "verylargeword", "evenlargerword", "veryveryverylargeword", "thisphrasedoesnotexist", "abcdefghijklmnopqrstuvwxyz" };
 
 	int sampleSize = 1000;
 	chrono::duration<double, micro> timeMilli;
@@ -104,7 +104,7 @@ void testStringSearches(string txtF, string ptFile, string oFile, string flag){
 			fixText(text, KMPall[i-1], pattern.size());
 	}
 
-	printHTML(text, KMPall, oFile, KMPall.size(), BFtotalTime, KMPtotalTime, RKtotalTime);
+	printHTML(text, KMPall, oFile, KMPall.size(), BFtotalTime, KMPtotalTime, RKtotalTime, flag);
 
 }
 
