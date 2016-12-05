@@ -1,12 +1,11 @@
 #include "RabinKarp.h"
 #include <iostream>
-#include <set>
+#include <unordered_map>
+#include <algorithm>
+#include <utility>
 using namespace std;
 
 RabinKarp::RabinKarp(std::string text, std::string pattern) : text(text), pattern(pattern) {
-
-	// So we know when to stop searching substrings
-	lastSubstringIndex = text.length() - pattern.length();
 
 	// Set up base value for calculating hashes
 	primeNumber = 199;
@@ -16,30 +15,50 @@ RabinKarp::RabinKarp(std::string text, std::string pattern) : text(text), patter
 }
 
 vector<vector<int>> RabinKarp::findMultiple(vector<string> patterns){
-	vector<int> hashes;
+	unordered_multimap<int, string> hashToStringMap;
+	unordered_multimap<string, int> stringToIndexMap;
+	int minLength = getMinLength(patterns);
+	textHash = calculateInitialHash(text.substr(0, minLength));
+	lastSubstringIndex = text.length() - minLength;
+
 	vector<vector<int>> multipleIndices;
+	multipleIndices.reserve(patterns.size());
 
 	for (int i = 0; i < patterns.size(); i++) {
-		hashes.push_back(calculateInitialHash(patterns[i]));
+		vector<int> tempVector;
+		tempVector.reserve(10);
+		multipleIndices.push_back(tempVector);
+	}
+
+	// Initial hashes
+	for (int i = 0; i < patterns.size(); i++) {
+		hashToStringMap.insert(
+			{ calculateInitialHash(patterns[i]), patterns[i] }
+		);
+
+		// For figuring out what index to put a matching pattern to
+		stringToIndexMap.insert(
+			{ patterns[i], i }
+		);
 	}
 
 	// Slide the text window and check for a matching pattern
 	for (int currentIndex = 0; currentIndex <= lastSubstringIndex; currentIndex++) {
 
-		// Compare hashes and verify that they are the same string
-		int index = -1;
-		for (int j = 0; j < hashes.size(); j++) {
-			if (hashes[j] == textHash) {
-				index = j;
+		// Get all strings that map to this hash
+		auto range = hashToStringMap.equal_range(textHash);
+
+		for (auto it = range.first; it != range.second; it++) {
+			if (compareStrings(currentIndex, it->second)) {
+				auto indexIter = stringToIndexMap.find(it->second);
+				multipleIndices[indexIter->second].push_back(currentIndex);
 				break;
 			}
 		}
-		if (index != -1 && compareMultipleStrings(currentIndex, patterns[index])) {
-			multipleIndices[index].push_back(currentIndex);
-		}
 
 		// Calculate rolling hash - remove most significant character (at currentIndex) and add next character after the window
-		calculateRollingHash(currentIndex);
+		calculateRollingHash(currentIndex, minLength);
+
 	}
 
 	return multipleIndices;
@@ -56,12 +75,12 @@ vector<int> RabinKarp::findAll(){
 	for (int currentIndex = 0; currentIndex <= lastSubstringIndex; currentIndex++) {
 
 		// Compare hashes and verify that they are the same string
-		if (patternHash == textHash && compareStrings(currentIndex)) {
+		if (patternHash == textHash && compareStrings(currentIndex, pattern)) {
 			indices.push_back(currentIndex);
 		}
 
 		// Calculate rolling hash - remove most significant character (at currentIndex) and add next character after the window
-		calculateRollingHash(currentIndex);
+		calculateRollingHash(currentIndex, pattern.length());
 	}
 
 	return indices;
@@ -76,12 +95,12 @@ int RabinKarp::search(){
 	for (int currentIndex = 0; currentIndex <= lastSubstringIndex; currentIndex++) {
 
 		// Compare hashes and verify that they are the same string
-		if (patternHash == textHash && compareStrings(currentIndex)) {
+		if (patternHash == textHash && compareStrings(currentIndex, pattern)) {
 			return currentIndex;
 		}
 
 		// Calculate rolling hash - remove most significant character (at currentIndex) and add next character after the window
-		calculateRollingHash(currentIndex);
+		calculateRollingHash(currentIndex, pattern.length());
 	}
 
 	return -1;	// Could not find the pattern
@@ -102,38 +121,45 @@ int RabinKarp::calculateMSCFactor() {
 int RabinKarp::calculateInitialHash(string substring) {
 	int hash = 0;
 
-	for (int i = 0; i < pattern.length(); i++) {
+	for (int i = 0; i < substring.length(); i++) {
 		hash = (primeNumber*hash + substring[i]);
 	}
 
 	return hash;
 }
 
-// Check for identical strings
-bool RabinKarp::compareStrings(int currentIndex) {
-	for (int i = 0; i < pattern.length(); i++) {
-		if (text[currentIndex+i] != pattern[i]) return false;
-	}
-	return true;
-}
+// Compare s and text window for identical strings
+bool RabinKarp::compareStrings(int currentIndex, string s) {
 
-bool RabinKarp::compareMultipleStrings(int currentIndex, string pattern) {
-	for (int i = 0; i < pattern.length(); i++) {
-		if (text[currentIndex+i] != pattern[i]) return false;
+	if (currentIndex + s.length() > text.length()) return false;		// Already reached the end
+
+	for (int i = 0; i < s.length(); i++) {
+		if (text[currentIndex+i] != s[i]) return false;
 	}
 	return true;
 }
 
 // Rolling hash - remove most significant character and add next character. Runs in O(1)
-void RabinKarp::calculateRollingHash(int currentIndex) {
+void RabinKarp::calculateRollingHash(int currentIndex, int patternLength) {
 	if (currentIndex < lastSubstringIndex) {
 		textHash = primeNumber*(textHash - text[currentIndex]*MSCfactor);	// Remove most significant character
-		textHash += text[currentIndex+pattern.length()];					// Add next character
+		textHash += text[currentIndex+patternLength];						// Add next character
 	}
 }
 
 // Generate hash values for the pattern and the first text window
 void RabinKarp::preprocessHashes() {
+	// So we know when to stop searching substrings
+	lastSubstringIndex = text.length() - pattern.length();
+
 	patternHash = calculateInitialHash(pattern);
-	textHash = calculateInitialHash(text);
+	textHash = calculateInitialHash(text.substr(0, pattern.length()));
+}
+
+int RabinKarp::getMinLength(std::vector<std::string> patterns) {
+	int min = patterns[0].length();
+
+	for (int i = 1; i < patterns.size(); i++) {
+		if (patterns[i].length() < min) min = patterns[i].length();
+	}
 }

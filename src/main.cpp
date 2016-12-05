@@ -82,7 +82,7 @@ void testStringSearches(string txtF, string ptFile, string oFile){
 		auto begin = chrono::steady_clock::now();
 		RabinKarp RKrun(text, pattern);
 		RKall = RKrun.findAll();
-		RKrun.findMultiple(multiplePatterns);
+		vector<vector<int>> RKmul = RKrun.findMultiple(multiplePatterns);
 		auto end = chrono::steady_clock::now();
 		timeMilli = end - begin;
 		RKtotalTime += timeMilli.count();

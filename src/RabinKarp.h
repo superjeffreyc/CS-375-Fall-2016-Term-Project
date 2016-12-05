@@ -23,10 +23,10 @@ public:
 private:
 	int calculateMSCFactor();
 	int calculateInitialHash(std::string substring);
-	bool compareStrings(int currentIndex);
-	bool compareMultipleStrings(int currentIndex, std::string pattern);
-	void calculateRollingHash(int currentIndex);
+	bool compareStrings(int currentIndex, std::string pattern);
+	void calculateRollingHash(int currentIndex, int patternLength);
 	void preprocessHashes();
+	int getMinLength(std::vector<std::string>);
 };
 
 #endif
