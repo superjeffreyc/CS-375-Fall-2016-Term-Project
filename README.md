@@ -22,20 +22,18 @@ Knuth Morris Pratt Algorithm
 - (explanation)
 
 ## Things to Finish
-- create more test cases (backpack for KMP) (harry potter for random) (RK - )
 - change highlighting color for each find multiple word
-- make command line arg to take another flag for running multiple patterns
 - finish ppt KMP
 
 ## How To Run
 ```sh
 	$ make
-	$ ./SearchComparisons ../test/t4Text.txt ../test/t4Pattern.txt output.html
+	$ ./SearchComparisons ../test/t4Text.txt ../test/t4Pattern.txt output.html multiple
 	$ firefox output.html & 
 ```
 or 
 ```sh
-	$ make run
+	$ make runMultiple
 	firefox output.html &
 ```
 
