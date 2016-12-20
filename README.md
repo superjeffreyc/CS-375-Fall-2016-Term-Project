@@ -25,18 +25,19 @@ Knuth Morris Pratt Algorithm
 - Space Complexity: O(m)
 
 ## Things to Finish
-- change highlighting color for each find multiple word
-- finish ppt KMP
+- split main file into multiple functions with testing and timing seperated
+- integrate RK in testing
+- create more test cases
+- have html file show time for each algo as well
+- litter code with more comments? (probably not needed though)
+- change highlighting color and/or method
+- change up html doc to make it better presentation?
 
 ## How To Run
 ```sh
 	$ make
-	$ ./SearchComparisons ../test/t4Text.txt ../test/t4Pattern.txt output.html multiple
+	$ ./SearchComparisons ../test/t4Text.txt ../test/t4Pattern.txt output.html
 	$ firefox output.html & 
 ```
-or 
-```sh
-	$ make runMultiple
-	firefox output.html &
-```
+Change up the test files to see different ones in html with highlight	
 
