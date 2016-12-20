@@ -24,10 +24,6 @@ Knuth Morris Pratt Algorithm
 - Best/Average/Worst time complexity: O(n+m)
 - Space Complexity: O(m)
 
-## Things to Finish
-- change highlighting color for each find multiple word
-- finish ppt KMP
-
 ## How To Run
 ```sh
 	$ make
