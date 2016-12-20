@@ -19,7 +19,10 @@ Rabin Karp Algorithm
 - Worst case time complexity: O(nm)
 
 Knuth Morris Pratt Algorithm
-- (explanation)
+- Pre-process the pattern by creating a prefix-suffix array in O(m)
+- Use the prefix-suffix array to skip characters in the text when searching for the pattern. 
+- Best/Average/Worst time complexity: O(n+m)
+- Space Complexity: O(m)
 
 ## Things to Finish
 - split main file into multiple functions with testing and timing seperated
