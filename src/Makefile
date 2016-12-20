@@ -19,6 +19,9 @@ RabinKarp.o: RabinKarp.h StringSearch.h RabinKarp.cpp
 main.o: BruteForce.h KMPSearch.h RabinKarp.h main.cpp
 	$(CC) $(CFLAGS) main.cpp -o main.o
 
+runMultiple: all
+	./SearchComparisons ../test/t3Text.txt ../test/t3Pattern.txt ../test/t3Output.html multiple
+
 run: all
 	./SearchComparisons ../test/t3Text.txt ../test/t3Pattern.txt ../test/t3Output.html
 

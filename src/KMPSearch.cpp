@@ -75,6 +75,7 @@ int KMPSearch::search(){
 std::vector<std::vector<int>> KMPSearch::findMultiple(std::vector<std::string> patterns){
 	std::vector<std::vector<int>> ret;
 	for(int i =0; i < patterns.size(); i++){
+		pattern = patterns[i];
 		suffixArr.clear();
 		pSize = patterns[i].size();
 
