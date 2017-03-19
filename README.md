@@ -24,12 +24,11 @@ Knuth Morris Pratt Algorithm
 - Best/Average/Worst time complexity: O(n+m)
 - Space Complexity: O(m)
 
-=======
 ## How To Run
-```sh
-	$ make
-	$ ./SearchComparisons ../test/t4Text.txt ../test/t4Pattern.txt output.html
-	$ firefox output.html & 
-```
+
+    $ make
+    $ ./SearchComparisons ../test/t4Text.txt ../test/t4Pattern.txt output.html
+    $ firefox output.html & 
+
 Change up the test files to see different ones in html with highlight	
 
